@@ -51,35 +51,35 @@ module ActiveAdmin
       end
     end
 
-    class SessionsController < ::Devise::SessionsController
-      include ::ActiveAdmin::Devise::Controller
+    # class SessionsController < ::Devise::SessionsController
+    #   include ::ActiveAdmin::Devise::Controller
 
-      ActiveSupport.run_load_hooks(:active_admin_controller, self)
-    end
+    #   ActiveSupport.run_load_hooks(:active_admin_controller, self)
+    # end
 
-    class PasswordsController < ::Devise::PasswordsController
-      include ::ActiveAdmin::Devise::Controller
+    # class PasswordsController < ::Devise::PasswordsController
+    #   include ::ActiveAdmin::Devise::Controller
 
-      ActiveSupport.run_load_hooks(:active_admin_controller, self)
-    end
+    #   ActiveSupport.run_load_hooks(:active_admin_controller, self)
+    # end
 
-    class UnlocksController < ::Devise::UnlocksController
-      include ::ActiveAdmin::Devise::Controller
+    # class UnlocksController < ::Devise::UnlocksController
+    #   include ::ActiveAdmin::Devise::Controller
 
-      ActiveSupport.run_load_hooks(:active_admin_controller, self)
-    end
+    #   ActiveSupport.run_load_hooks(:active_admin_controller, self)
+    # end
 
-    class RegistrationsController < ::Devise::RegistrationsController
-      include ::ActiveAdmin::Devise::Controller
+    # class RegistrationsController < ::Devise::RegistrationsController
+    #   include ::ActiveAdmin::Devise::Controller
 
-      ActiveSupport.run_load_hooks(:active_admin_controller, self)
-    end
+    #   ActiveSupport.run_load_hooks(:active_admin_controller, self)
+    # end
 
-    class ConfirmationsController < ::Devise::ConfirmationsController
-      include ::ActiveAdmin::Devise::Controller
+    # class ConfirmationsController < ::Devise::ConfirmationsController
+    #   include ::ActiveAdmin::Devise::Controller
 
-      ActiveSupport.run_load_hooks(:active_admin_controller, self)
-    end
+    #   ActiveSupport.run_load_hooks(:active_admin_controller, self)
+    # end
 
     def self.controllers_for_filters
       [SessionsController, PasswordsController, UnlocksController,
