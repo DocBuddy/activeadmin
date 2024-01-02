@@ -24,9 +24,6 @@ module WithinHelpers
     #  when /the header/
     #    [:xpath, "//header"]
 
-    when "index grid"
-      [:css, "table.index_grid"]
-
     when /^the "([^"]*)" sidebar$/
       [:css, "##{$1.tr(" ", '').underscore}_sidebar_section"]
 
@@ -68,6 +65,10 @@ end
 
 When /^I follow "([^"]*)"$/ do |link|
   first(:link, link).click
+end
+
+When /^I click "(.*?)"$/ do |link|
+  click_link(link)
 end
 
 When /^I fill in "([^"]*)" with "([^"]*)"$/ do |field, value|
@@ -118,4 +119,12 @@ end
 
 Then /^I should be on (.+)$/ do |page_name|
   expect(URI.parse(current_url).path).to eq path_to page_name
+end
+
+Then(/^I should see content "(.*?)" above other content "(.*?)"$/) do |top_title, bottom_title|
+  expect(page).to have_css %Q(div:contains('#{top_title}') + div:contains('#{bottom_title}'))
+end
+
+Then /^I should see a flash with "([^"]*)"$/ do |text|
+  expect(page).to have_content text
 end

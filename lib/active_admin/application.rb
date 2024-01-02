@@ -43,15 +43,12 @@ module ActiveAdmin
       @namespaces = Namespace::Store.new
     end
 
-    include AssetRegistration
-
     # Event that gets triggered on load of Active Admin
     BeforeLoadEvent = "active_admin.application.before_load".freeze
     AfterLoadEvent = "active_admin.application.after_load".freeze
 
     # Runs before the app's AA initializer
     def setup!
-      register_default_assets
     end
 
     # Runs after the app's AA initializer
@@ -148,7 +145,7 @@ module ActiveAdmin
     #   ActiveAdmin.before_action :authenticate_admin!
     #
     AbstractController::Callbacks::ClassMethods.public_instance_methods.
-      select { |m| m.match(/_action\z/) }.each do |name|
+      select { |m| m.end_with?('_action') }.each do |name|
       define_method name do |*args, &block|
         ActiveSupport.on_load(:active_admin_controller) do
           public_send name, *args, &block
@@ -163,11 +160,6 @@ module ActiveAdmin
     end
 
     private
-
-    def register_default_assets
-      register_stylesheet "active_admin.css", media: "all"
-      register_javascript "active_admin.js"
-    end
 
     # Since app/admin is alphabetically before app/models, we have to remove it
     # from the host app's +autoload_paths+ to prevent missing constant errors.

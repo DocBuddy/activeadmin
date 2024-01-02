@@ -1,9 +1,6 @@
 ca:
   active_admin:
     dashboard: Tauler
-    dashboard_welcome:
-      welcome: "Benvingut a Active Admin. Aquest és el tauler per defecte."
-      call_to_action: "Mira l'arxiu 'app/admin/dashboard.rb' per afegir seccions al tauler"
     view: "Mostra"
     edit: "Edita"
     delete: "Elimina"
@@ -24,18 +21,10 @@ ca:
       buttons:
         filter: "Filtrar"
         clear: "Treure filtres"
-      predicates:
-        contains: "Conté"
-        equals: "Igual a"
-        starts_with: "Comença amb"
-        ends_with: "Acaba amb"
-        greater_than: "Més gran que"
-        less_than: "Més petit que"
     status_tag:
       "yes": "Sí"
       "no": "No"
       "unset": "No"
-    main_content: "Implementa %{model}#main_content per mostrar contingut."
     logout: "Desconnecta't"
     powered_by: "Powered by %{active_admin} %{version}"
     sidebars:
@@ -53,8 +42,6 @@ ca:
     blank_slate:
       content: "Encara no hi ha cap %{resource_name}."
       link: "Crea'n un/a"
-    dropdown_actions:
-      button_label: "accions"
     batch_actions:
       button_label: "les accions per lots"
       default_confirmation: "¿Esteu segur que voleu fer-ho?"

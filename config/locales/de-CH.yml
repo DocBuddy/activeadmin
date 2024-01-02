@@ -1,9 +1,6 @@
 "de-CH":
   active_admin:
     dashboard: Übersicht
-    dashboard_welcome:
-      welcome: "Willkommen in Active Admin. Dies ist die Standard-Übersichtsseite."
-      call_to_action: "Siehe 'app/admin/dashboards.rb', um Übersichts-Bereiche hinzuzufügen."
     view: "Anzeigen"
     edit: "Bearbeiten"
     delete: "Löschen"
@@ -24,18 +21,10 @@
       buttons:
         filter: "Filtern"
         clear: "Filter entfernen"
-      predicates:
-        contains: "Enthält"
-        equals: "Gleich"
-        starts_with: "Beginnt mit"
-        ends_with: "Endet mit"
-        greater_than: "Grösser als"
-        less_than: "Kleiner als"
     status_tag:
       "yes": "Ja"
       "no": "Nicht"
       "unset": "Nicht"
-    main_content: "Bitte implementieren Sie %{model}#main_content, um Inhalte anzuzeigen."
     logout: "Abmelden"
     powered_by: "Powered by %{active_admin} %{version}"
     sidebars:
@@ -53,8 +42,6 @@
     blank_slate:
       content: "Es gibt noch keine %{resource_name}."
       link: "Erstellen"
-    dropdown_actions:
-      button_label: "Aktionen"
     batch_actions:
       button_label: "Stapelverarbeitung"
       default_confirmation: "Bist du sicher, dass Sie dies tun wollen?"
@@ -95,7 +82,3 @@
         sign_in_with_omniauth_provider: "Anmeldung mit %{provider}"
         resend_unlock_instructions: "Entsperrungsanweisung erneut senden"
         resend_confirmation_instructions: "Bestätigungsanweisung erneut senden"
-    unsupported_browser:
-      headline: "ActiveAdmin unterstützt nicht länger den Internet Explorer in Version 8 oder niedriger."
-      recommendation: "Wir empfehlen die Nutzung von <a href=\"http://windows.microsoft.com/ie\">Internet Explorer</a>, <a href=\"https://chrome.google.com/\">Google Chrome</a>, oder <a href=\"https://mozilla.org/firefox/\">Firefox</a>."
-      turn_off_compatibility_view: "Wenn sie IE 9 oder neuer benutzen, stellen sie sicher das sie den <a href=\"https://support.microsoft.com/de-ch/help/17471\">\"Kompatibilitätsansicht\" ausgeschaltet</a> haben."

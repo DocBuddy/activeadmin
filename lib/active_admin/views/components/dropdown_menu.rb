@@ -34,33 +34,35 @@ module ActiveAdmin
         @menu = build_menu(menu_options)
 
         super(options)
+        add_class "dropdown"
       end
 
-      def item(*args, **kwargs)
+      def item(*args, **kwargs, &block)
         within @menu do
-          li link_to(*args, **kwargs)
+          if block
+            li &block
+          else
+            li link_to(*args, **kwargs)
+          end
         end
       end
 
       private
 
-      def build_button(name, button_options)
-        button_options[:class] = "#{button_options[:class]} dropdown_menu_button"
-        button_options[:href] = "#"
+      def build_button(name, options)
+        options[:class] = "#{options[:class]} dropdown-toggle"
 
-        a name, button_options
+        button name, type: :button, "data-dropdown-toggle": dom_id, **options
       end
 
       def build_menu(options)
-        options[:class] = "#{options[:class]} dropdown_menu_list"
+        options[:class] = "#{options[:class]} dropdown-menu"
+        options[:id] = dom_id
+        ul(options)
+      end
 
-        menu_list = nil
-
-        div class: "dropdown_menu_list_wrapper" do
-          menu_list = ul(options)
-        end
-
-        menu_list
+      def dom_id
+        "dropdown-#{object_id}"
       end
 
     end

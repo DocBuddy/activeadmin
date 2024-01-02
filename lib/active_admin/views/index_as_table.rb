@@ -72,7 +72,7 @@ module ActiveAdmin
     #   selectable_column
     #   column :title
     #   actions do |post|
-    #     item "Preview", admin_preview_post_path(post), class: "member_link"
+    #     item "Preview", admin_preview_post_path(post), class: "preview-link"
     #   end
     # end
     # ```
@@ -98,32 +98,6 @@ module ActiveAdmin
     #   end
     # end
     # ```
-    #
-    # In case you prefer to list actions links in a dropdown menu:
-    #
-    # ```ruby
-    # index do
-    #   selectable_column
-    #   column :title
-    #   actions dropdown: true do |post|
-    #     item "Preview", admin_preview_post_path(post)
-    #   end
-    # end
-    # ```
-    #
-    # In addition, you can insert the position of the row in the greater
-    # collection by using the index_column special command:
-    #
-    # ```ruby
-    # index do
-    #   selectable_column
-    #   index_column
-    #   column :title
-    # end
-    # ```
-    #
-    # index_column take an optional offset parameter to allow a developer to set
-    # the starting number for the index (default is 1).
     #
     # ## Sorting
     #
@@ -234,35 +208,23 @@ module ActiveAdmin
     # ```
     #
     class IndexAsTable < ActiveAdmin::Component
-
       def build(page_presenter, collection)
+        add_class "index-as-table"
         table_options = {
           id: "index_table_#{active_admin_config.resource_name.plural}",
           sortable: true,
-          class: "index_table index",
+          class: "index_table",
           i18n: active_admin_config.resource_class,
           paginator: page_presenter[:paginator] != false,
           row_class: page_presenter[:row_class]
         }
 
-        table_for collection, table_options do |t|
-          table_config_block = page_presenter.block || default_table
-          instance_exec(t, &table_config_block)
-        end
-      end
-
-      def table_for(*args, &block)
-        insert_tag IndexTableFor, *args, &block
-      end
-
-      def default_table
-        proc do
-          selectable_column
-          id_column if resource_class.primary_key
-          active_admin_config.resource_columns.each do |attribute|
-            column attribute
+        if page_presenter.block
+          insert_tag(IndexTableFor, collection, table_options) do |t|
+            instance_exec(t, &page_presenter.block)
           end
-          actions
+        else
+          render "index_as_table_default", table_options: table_options
         end
       end
 
@@ -275,18 +237,13 @@ module ActiveAdmin
       # methods for quickly displaying items on the index page
       #
       class IndexTableFor < ::ActiveAdmin::Views::TableFor
+        builder_method :index_table_for
 
         # Display a column for checkbox
-        def selectable_column
+        def selectable_column(**options)
           return unless active_admin_config.batch_actions.any?
-          column resource_selection_toggle_cell, class: "col-selectable", sortable: false do |resource|
+          column resource_selection_toggle_cell, class: options[:class], sortable: false do |resource|
             resource_selection_cell resource
-          end
-        end
-
-        def index_column(start_value = 1)
-          column "#", class: "col-index", sortable: false do |resource|
-            @collection.offset_value + @collection.index(resource) + start_value
           end
         end
 
@@ -295,17 +252,13 @@ module ActiveAdmin
           raise "#{resource_class.name} has no primary_key!" unless resource_class.primary_key
           column(resource_class.human_attribute_name(resource_class.primary_key), sortable: resource_class.primary_key) do |resource|
             if controller.action_methods.include?("show")
-              link_to resource.id, resource_path(resource), class: "resource_id_link"
+              link_to resource.id, resource_path(resource)
             elsif controller.action_methods.include?("edit")
-              link_to resource.id, edit_resource_path(resource), class: "resource_id_link"
+              link_to resource.id, edit_resource_path(resource)
             else
               resource.id
             end
           end
-        end
-
-        def default_actions
-          raise "`default_actions` is no longer provided in ActiveAdmin 1.x. Use `actions` instead."
         end
 
         # Add links to perform actions.
@@ -333,38 +286,17 @@ module ActiveAdmin
         #   item 'Grant Admin', grant_admin_admin_user_path(admin_user)
         # end
         #
-        # # Append some actions onto the end of the default actions displayed in a Dropdown Menu
-        # actions dropdown: true do |admin_user|
-        #   item 'Grant Admin', grant_admin_admin_user_path(admin_user)
-        # end
-        #
-        # # Custom actions without the defaults displayed in a Dropdown Menu.
-        # actions defaults: false, dropdown: true, dropdown_name: 'Additional actions' do |admin_user|
-        #   item 'Grant Admin', grant_admin_admin_user_path(admin_user)
-        # end
-        #
         # ```
         def actions(options = {}, &block)
           name = options.delete(:name) { "" }
           defaults = options.delete(:defaults) { true }
-          dropdown = options.delete(:dropdown) { false }
-          dropdown_name = options.delete(:dropdown_name) { I18n.t "active_admin.dropdown_actions.button_label", default: "Actions" }
-
-          options[:class] ||= "col-actions"
 
           column name, options do |resource|
-            if dropdown
-              dropdown_menu dropdown_name do
-                defaults(resource) if defaults
-                instance_exec(resource, &block) if block_given?
-              end
-            else
-              table_actions do
-                defaults(resource, css_class: :member_link) if defaults
-                if block_given?
-                  block_result = instance_exec(resource, &block)
-                  text_node block_result unless block_result.is_a? Arbre::Element
-                end
+            table_actions do
+              defaults(resource) if defaults
+              if block
+                block_result = instance_exec(resource, &block)
+                text_node block_result unless block_result.is_a? Arbre::Element
               end
             end
           end
@@ -377,7 +309,7 @@ module ActiveAdmin
           if controller.action_methods.include?("show") && authorized?(ActiveAdmin::Auth::READ, resource)
             item localizer.t(:view), resource_path(resource), class: "view_link #{options[:css_class]}", title: localizer.t(:view)
           end
-          if controller.action_methods.include?("edit") && authorized?(ActiveAdmin::Auth::UPDATE, resource)
+          if controller.action_methods.include?("edit") && authorized?(ActiveAdmin::Auth::EDIT, resource)
             item localizer.t(:edit), edit_resource_path(resource), class: "edit_link #{options[:css_class]}", title: localizer.t(:edit)
           end
           if controller.action_methods.include?("destroy") && authorized?(ActiveAdmin::Auth::DESTROY, resource)
@@ -389,12 +321,16 @@ module ActiveAdmin
         class TableActions < ActiveAdmin::Component
           builder_method :table_actions
 
+          def initialize(*)
+            super
+            add_class "data-table-resource-actions"
+          end
+
           def item *args, **kwargs
             text_node link_to(*args, **kwargs)
           end
         end
       end # IndexTableFor
-
     end
   end
 end

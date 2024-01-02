@@ -17,9 +17,6 @@ de:
         updated_at: "Aktualisiert"
   active_admin:
     dashboard: Übersicht
-    dashboard_welcome:
-      welcome: "Willkommen in Active Admin. Dies ist die Standard-Übersichtsseite."
-      call_to_action: "Siehe 'app/admin/dashboard.rb', um Übersichts-Bereiche hinzuzufügen."
     view: "Anzeigen"
     edit: "Bearbeiten"
     delete: "Löschen"
@@ -43,28 +40,16 @@ de:
         filter: "Filtern"
         clear: "Filter entfernen"
       predicates:
-        contains: "Enthält"
-        equals: "Gleich"
-        starts_with: "Beginnt mit"
-        ends_with: "Endet mit"
-        greater_than: "Größer als"
-        less_than: "Kleiner als"
-        gteq_datetime: "Größer gleich"
-        lteq_datetime: "Kleiner gleich"
         from: "Von"
         to: "Bis"
     scopes:
       all: "Alle"
     search_status:
-      headline: "Filter"
-      current_scope: "Anwendungsbereich:"
-      current_filters: "Aktuelle Filter:"
       no_current_filters: "Keine"
     status_tag:
       "yes": "Ja"
       "no": "Nein"
       "unset": "Nein"
-    main_content: "Bitte implementieren Sie %{model}#main_content, um Inhalte anzuzeigen."
     logout: "Abmelden"
     powered_by: "Powered by %{active_admin} %{version}"
     sidebars:
@@ -84,8 +69,6 @@ de:
     blank_slate:
       content: "Es gibt noch keine %{resource_name}."
       link: "Erstellen"
-    dropdown_actions:
-      button_label: "Aktionen"
     batch_actions:
       button_label: "Stapelverarbeitung"
       default_confirmation: "Bist du sicher, dass Sie dies tun wollen?"
@@ -149,10 +132,6 @@ de:
         sign_in_with_omniauth_provider: "Anmeldung mit %{provider}"
         resend_unlock_instructions: "Entsperrungsanweisung erneut senden"
         resend_confirmation_instructions: "Bestätigungsanweisung erneut senden"
-    unsupported_browser:
-      headline: "ActiveAdmin unterstützt nicht länger den Internet Explorer in Version 8 oder niedriger."
-      recommendation: "Wir empfehlen die Nutzung von <a href=\"http://windows.microsoft.com/ie\">Internet Explorer</a>, <a href=\"https://chrome.google.com/\">Google Chrome</a>, oder <a href=\"https://mozilla.org/firefox/\">Firefox</a>."
-      turn_off_compatibility_view: "Wenn sie IE 9 oder neuer benutzen, stellen sie sicher das sie den <a href=\"https://support.microsoft.com/de-de/help/17471\">\"Kompatibilitätsansicht\" ausgeschaltet</a> haben."
     access_denied:
       message: "Sie haben nicht die Berechtigung um diese Aktion auszuführen."
     index_list:

@@ -44,8 +44,6 @@ module ActiveAdmin
     def format_action(action, subject)
       # https://github.com/varvet/pundit/blob/master/lib/generators/pundit/install/templates/application_policy.rb
       case action
-      when Auth::CREATE then :create?
-      when Auth::UPDATE then :update?
       when Auth::READ then subject.is_a?(Class) ? :index? : :show?
       when Auth::DESTROY then subject.is_a?(Class) ? :destroy_all? : :destroy?
       else "#{action}?"
@@ -79,7 +77,7 @@ module ActiveAdmin
 
       policy_name = policy.class.to_s
 
-      Deprecation.warn "You have `pundit_policy_namespace` configured as `#{default_policy_namespace}`, " \
+      ActiveAdmin.deprecator.warn "You have `pundit_policy_namespace` configured as `#{default_policy_namespace}`, " \
         "but ActiveAdmin was unable to find policy #{default_policy_module}::#{policy_name}. " \
         "#{policy_name} will be used instead. " \
         "This behavior will be removed in future versions of ActiveAdmin. " \

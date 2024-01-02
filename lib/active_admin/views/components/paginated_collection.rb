@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require "active_admin/helpers/collection"
-require "active_admin/view_helpers/download_format_links_helper"
 
 module ActiveAdmin
   module Views
@@ -19,8 +18,8 @@ module ActiveAdmin
     # posts in one of the following formats:
     #
     # * "No Posts found"
-    # * "Displaying all 10 Posts"
-    # * "Displaying Posts 1 - 30 of 31 in total"
+    # * "Showing all 10 Posts"
+    # * "Showing Posts 1 - 30 of 31 in total"
     #
     # It will also generate pagination links.
     #
@@ -49,8 +48,8 @@ module ActiveAdmin
         unless collection.respond_to?(:total_pages)
           raise(StandardError, "Collection is not a paginated scope. Set collection.page(params[:page]).per(10) before calling :paginated_collection.")
         end
-
-        @contents = div(class: "paginated_collection_contents")
+        add_class "paginated-collection"
+        @contents = div(class: "paginated-collection-contents")
         build_pagination_with_formats(options)
         @built = true
       end
@@ -67,20 +66,23 @@ module ActiveAdmin
       protected
 
       def build_pagination_with_formats(options)
-        div id: "index_footer" do
-          build_per_page_select if @per_page.is_a?(Array)
+        div class: "paginated-collection-pagination" do
+          div page_entries_info(options).html_safe, class: "pagination-information"
           build_pagination
-          div(page_entries_info(options).html_safe, class: "pagination_information")
-
-          formats = build_download_formats @download_links
-          build_download_format_links formats if formats.any?
+        end
+        formats = build_download_formats @download_links
+        if @per_page.is_a?(Array) || formats.any?
+          div class: "paginated-collection-footer" do
+            build_per_page_select if @per_page.is_a?(Array)
+            render("active_admin/shared/download_format_links", formats: formats) if formats.any?
+          end
         end
       end
 
       def build_per_page_select
-        div class: "pagination_per_page" do
+        div do
           text_node I18n.t("active_admin.pagination.per_page")
-          select do
+          select class: "pagination-per-page" do
             @per_page.each do |per_page|
               option(
                 per_page,
@@ -93,7 +95,7 @@ module ActiveAdmin
       end
 
       def build_pagination
-        options = { theme: @display_total ? "active_admin" : "active_admin_countless" }
+        options = { views_prefix: :active_admin, outer_window: 1, window: 2 }
         options[:params] = @params if @params
         options[:param_name] = @param_name if @param_name
 
@@ -112,7 +114,6 @@ module ActiveAdmin
       end
 
       include ::ActiveAdmin::Helpers::Collection
-      include ::ActiveAdmin::ViewHelpers::DownloadFormatLinksHelper
 
       # modified from will_paginate
       def page_entries_info(options = {})

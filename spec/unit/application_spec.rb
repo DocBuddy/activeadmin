@@ -26,26 +26,9 @@ RSpec.describe ActiveAdmin::Application do
     expect(application.site_title).to eq "New Title"
   end
 
-  it "should store the site's title link" do
-    expect(application.site_title_link).to eq ""
-  end
-
-  it "should set the site's title link" do
-    application.site_title_link = "http://www.mygreatsite.com"
-    expect(application.site_title_link).to eq "http://www.mygreatsite.com"
-  end
-
-  it "should store the site's title image" do
-    expect(application.site_title_image).to eq ""
-  end
-
-  it "should set the site's title image" do
-    application.site_title_image = "http://railscasts.com/assets/episodes/stills/284-active-admin.png?1316476106"
-    expect(application.site_title_image).to eq "http://railscasts.com/assets/episodes/stills/284-active-admin.png?1316476106"
-  end
-
-  it "should store the site's favicon" do
-    expect(application.favicon).to eq false
+  it "should set the site title using a block" do
+    application.site_title = proc { "Block Title" }
+    expect(application.site_title).to eq "Block Title"
   end
 
   it "should return default localize format" do
@@ -55,35 +38,6 @@ RSpec.describe ActiveAdmin::Application do
   it "should set localize format" do
     application.localize_format = :default
     expect(application.localize_format).to eq :default
-  end
-
-  it "should set the site's favicon" do
-    application.favicon = "/a/favicon.ico"
-    expect(application.favicon).to eq "/a/favicon.ico"
-  end
-
-  it "should store meta tags" do
-    expect(application.meta_tags).to eq({})
-  end
-
-  it "should set meta tags" do
-    application.meta_tags = { author: "My Company" }
-    expect(application.meta_tags).to eq(author: "My Company")
-  end
-
-  it "should contains robots meta tags by default" do
-    result = application.meta_tags_for_logged_out_pages
-    expect(result).to eq(robots: "noindex, nofollow")
-  end
-
-  it "should set meta tags for logged out pages" do
-    value = { author: "My Company" }
-    application.meta_tags_for_logged_out_pages = value
-    expect(application.meta_tags_for_logged_out_pages).to eq value
-  end
-
-  it "should have a view factory" do
-    expect(application.view_factory).to be_an_instance_of(ActiveAdmin::ViewFactory)
   end
 
   it "should allow comments by default" do
@@ -115,10 +69,6 @@ RSpec.describe ActiveAdmin::Application do
 
     it "should have a logout link path (Devise's default)" do
       expect(application.logout_link_path).to eq :destroy_admin_user_session_path
-    end
-
-    it "should have a logout link method (Devise's default)" do
-      expect(application.logout_link_method).to eq :get
     end
   end
 
